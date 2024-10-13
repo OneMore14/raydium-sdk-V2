@@ -11,7 +11,7 @@ import {
   fetchMultipleMintInfos,
   getMultipleAccountsInfoWithCustomFlags,
   minExpirationTime,
-  parseBigNumberish,
+  parseBigNumberish, SOLMint,
   solToWSol,
   WSOLMint,
 } from "@/common";
@@ -165,6 +165,8 @@ export default class TradeV2 extends ModuleBase {
     computeBudgetConfig,
     routeProgram,
     txVersion,
+    useSolBalance,
+    isOutputSol,
   }: {
     txVersion: T;
     swapInfo: ComputeAmountOutLayout;
@@ -175,13 +177,13 @@ export default class TradeV2 extends ModuleBase {
     };
     routeProgram: PublicKey;
     computeBudgetConfig?: ComputeBudgetConfig;
+    useSolBalance?: boolean;
+    isOutputSol?: boolean;
   }): Promise<MakeMultiTxData<T>> {
     const txBuilder = this.createTxBuilder();
 
     const amountIn = swapInfo.amountIn;
     const amountOut = swapInfo.amountOut;
-    const useSolBalance = amountIn.amount.token.mint.equals(WSOLMint);
-    const isOutputSol = amountOut.amount.token.mint.equals(WSOLMint);
     const inputMint = amountIn.amount.token.mint;
     const outputMint = amountOut.amount.token.mint;
 
